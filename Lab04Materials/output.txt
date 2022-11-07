@@ -1,0 +1,36 @@
+Inserting 10
+Inorder: 10(h=0,bf=0) - 
+-------
+Inserting 3
+Inorder: 3(h=0,bf=0) - 10(h=1,bf=1) - 
+-------
+Inserting 1
+Node 10 is unbalanced. Left of Left: Rotate Right
+Inorder: 1(h=0,bf=0) - 3(h=1,bf=0) - 10(h=0,bf=0) - 
+-------
+Inserting 7
+Inorder: 1(h=0,bf=0) - 3(h=2,bf=-1) - 7(h=0,bf=0) - 10(h=1,bf=1) - 
+-------
+Inserting 20
+Inorder: 1(h=0,bf=0) - 3(h=2,bf=-1) - 7(h=0,bf=0) - 10(h=1,bf=0) - 20(h=0,bf=0) - 
+-------
+Inserting 15
+Node 3 is unbalanced. Right of Right: Rotate Left
+Inorder: 1(h=0,bf=0) - 3(h=1,bf=0) - 7(h=0,bf=0) - 10(h=2,bf=0) - 15(h=0,bf=0) - 20(h=1,bf=1) - 
+-------
+Inserting 18
+Node 20 is unbalanced. Right of Left: Rotate Left
+Rotate Right
+Inorder: 1(h=0,bf=0) - 3(h=1,bf=0) - 7(h=0,bf=0) - 10(h=2,bf=0) - 15(h=0,bf=0) - 18(h=1,bf=0) - 20(h=0,bf=0) - 
+-------
+Inserting 17
+Inorder: 1(h=0,bf=0) - 3(h=1,bf=0) - 7(h=0,bf=0) - 10(h=3,bf=-1) - 15(h=1,bf=-1) - 17(h=0,bf=0) - 18(h=2,bf=1) - 20(h=0,bf=0) - 
+-------
+Inserting 16
+Node 15 is unbalanced. Left of Right: Rotate Right
+Rotate Left
+Inorder: 1(h=0,bf=0) - 3(h=1,bf=0) - 7(h=0,bf=0) - 10(h=3,bf=-1) - 15(h=0,bf=0) - 16(h=1,bf=0) - 17(h=0,bf=0) - 18(h=2,bf=1) - 20(h=0,bf=0) - 
+-------
+Inserting 22
+Inorder: 1(h=0,bf=0) - 3(h=1,bf=0) - 7(h=0,bf=0) - 10(h=3,bf=-1) - 15(h=0,bf=0) - 16(h=1,bf=0) - 17(h=0,bf=0) - 18(h=2,bf=0) - 20(h=1,bf=-1) - 22(h=0,bf=0) - 
+-------
