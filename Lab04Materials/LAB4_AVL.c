@@ -128,23 +128,36 @@ Node *rotateRight(Node *root)
 	n1->height = maxint(calcHeight(n1->leftChild), calcHeight(n1->rightChild)) + 1;
 
 	// return the new root
-	return root;
+	return n1;
 } // rotateRight()
 
 Node *rotateLeft(Node *root)
 // Rotate to left.  Returns new root pointer.
 {
 	printf("Rotate Left\n");
-	//---Your code goes here
-	//---<SNIP>---
 
-	//---</SNIP>---
-	return root;
+	Node *n1 = root->rightChild;
+	Node *n2 = n1->leftChild;
+
+	// Perform rotation
+	n1->leftChild = root;
+	root->rightChild = n2;
+
+	//  Update heights
+	root->height = maxint(calcHeight(root->leftChild), calcHeight(root->rightChild)) + 1;
+	n1->height = maxint(calcHeight(n1->leftChild), calcHeight(n1->rightChild)) + 1;
+
+	// Return new root
+	return n1;
 } // rotateLeft()
 
 int getBalanceFactor(Node *root)
 // Get balance factor - difference between left height and right height
 {
+	if (root == NULL)
+	{
+		return 0;
+	}
 	int hr = -1, hl = -1; // Default values
 	hl = calcHeight(root->leftChild);
 	hr = calcHeight(root->rightChild);
@@ -155,29 +168,18 @@ int calcHeight(Node *root)
 // Calculate height of this node by adding 1 to maximum of left, right
 // child height.
 {
-	int hrl = -1, hll = -1; // Default values
+	if (root == NULL)
+	{
+		return -1;
+	}
+	else
+	{
 
-	//---Your code goes here
-	//---Code has to compute hrl - height of right subtree - and compute
-	//---hll - height of left subtree. In last line, 1 is added to the maximum
-	//---of hll and hrl and that value is returned.
-	//---<SNIP>---
-
-	//---</SNIP>---
-	return maxint(hrl, hll) + 1;
+		int hrl = calcHeight(root->rightChild);
+		int hll = calcHeight(root->leftChild);
+		return maxint(hrl, hll) + 1;
+	}
 } // calcHeight();
-
-Node *rebalance(Node *root)
-// Check balance factor to see if balancing required (bf > 1 or bf < -1).
-// If balancing required, perform necessary rotations.
-{
-	int bf = getBalanceFactor(root);
-	//---Your code goes here
-	//---<SNIP>---
-
-	//---</SNIP>---
-	return root;
-} // rebalance()
 
 Node *insertNodeAVL(Key k, void *v, Node *root)
 // Build new node and insert into (non-empty) tree. Check if insertion has
@@ -199,8 +201,37 @@ Node *insertNodeAVL(Key k, void *v, Node *root)
 		root->rightChild = insertNodeAVL(k, v, root->rightChild);
 		root->height = calcHeight(root);
 	}
-	// Note - ignored equal case - should not occur.
-	return rebalance(root);
+
+	// Check if rebalance is needed
+	int bf = getBalanceFactor(root);
+
+	// 4 possible cases:
+
+	// left left
+	if (bf > 1 && k < root->leftChild->key)
+		return rotateRight(root);
+
+	// right right
+	if (bf < -1 && k > root->rightChild->key)
+		return rotateLeft(root);
+
+	// left right
+	if (bf > 1 && k > root->leftChild->key)
+	{
+		root->leftChild = rotateLeft(root->leftChild);
+		return rotateRight(root);
+	}
+
+	// right left
+	if (bf < -1 && k < root->rightChild->key)
+	{
+		root->rightChild = rotateRight(root->rightChild);
+		return rotateLeft(root);
+	}
+
+	// No rebalances needed, return unmodified root
+	return root;
+
 } // insertNode()
 
 void inOrderT(Node *root)
@@ -213,3 +244,93 @@ void inOrderT(Node *root)
 		inOrderT(root->rightChild);
 	}
 } // inOrderT()
+
+Node *findSmallestNode(Node *node)
+{
+	Node *current = node;
+	// descend down left children since smallest value is always on left child.
+	while (current->leftChild != NULL)
+	{
+		current = current->leftChild;
+	}
+	// return smallest key node.
+	return current;
+}
+
+Node *delete (Node *root, Key key)
+{
+	if (root == NULL)
+	{
+		return root;
+	}
+
+	if (key < root->key)
+	{
+		root->leftChild = delete (root->leftChild, key);
+	}
+	else if (key > root->key)
+	{
+		root->rightChild = delete (root->rightChild, key);
+	}
+	else
+	{
+		// node has same key as root key, delete this one, end recursive cycle
+		if (root->leftChild == NULL || root->rightChild == NULL)
+		{
+			Node *temp = root->leftChild ? root->leftChild : root->rightChild;
+
+			if (temp == NULL)
+			{
+				temp = root;
+				root = NULL;
+			}
+			else
+			{
+				*root = *temp;
+				free(temp);
+			}
+		}
+		else
+		{
+			Node *temp = findSmallestNode(root->rightChild);
+
+			root->key = temp->key;
+
+			root->rightChild = delete (root->rightChild, temp->key);
+		}
+	}
+
+	if (root == NULL)
+	{
+		return root;
+	}
+
+	root->height = 1 + maxint(calcHeight(root->leftChild),
+							  calcHeight(root->rightChild));
+
+	int balance = getBalanceFactor(root);
+
+	// Left Left Case
+	if (balance > 1 && getBalanceFactor(root->leftChild) >= 0)
+		return rotateRight(root);
+
+	// Left Right Case
+	if (balance > 1 && getBalanceFactor(root->leftChild) < 0)
+	{
+		root->leftChild = rotateLeft(root->leftChild);
+		return rotateRight(root);
+	}
+
+	// Right Right Case
+	if (balance < -1 && getBalanceFactor(root->rightChild) <= 0)
+		return rotateLeft(root);
+
+	// Right Left Case
+	if (balance < -1 && getBalanceFactor(root->rightChild) > 0)
+	{
+		root->rightChild = rotateRight(root->rightChild);
+		return rotateLeft(root);
+	}
+
+	return root;
+}

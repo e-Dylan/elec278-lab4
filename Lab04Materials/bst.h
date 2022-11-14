@@ -1,4 +1,4 @@
-// BST.H 
+// BST.H
 // Header file to be used with code for ELEC278 Lab 4.
 
 /* --README--------------------------------------------------------------------
@@ -14,17 +14,16 @@ course and the semester listed above.
 See LICENCE.MD for restrictions on the use of this code.
 ---------------------------------------------------------------------------- */
 
-
 #include <stdlib.h>
 #include <stdio.h>
 #include "bintree.h"
 
-#define	BST_FAIL	0		// return value when function fails
-#define	BST_OK		1		// return value when function succeeds
-
+#define BST_FAIL 0 // return value when function fails
+#define BST_OK 1   // return value when function succeeds
 
 // Prototypes for functions found in BST.C
 
-// Create new node with key=k, value=v and insert it into tree 
-// Returns 1 upon success, 0 failure 
-int insertBST (Key k, void *v, pNode root);
+// Create new node with key=k, value=v and insert it into tree
+// Returns 1 upon success, 0 failure
+void insertBST(Key k, void *v, Tree *t);
+Node *insertNodeBST(Key k, void *v, Node *root);
